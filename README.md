@@ -1,168 +1,159 @@
-# Technical Lesson - Algorithmic Problem Solving Framework
+# Technical Lesson - Common Array Methods for Problem Solving
 
 ## Introduction
 
-This practice lesson will be an example of how to apply the algorithmic problem solving framework to a problem.
+In this code along we will briefly examine the runtime of the following array methods: `pop`, `push`, `shift`, `unshift`, `slice`, `splice`.  We will use JavaScript's `console.time()` and `console.timeEnd()` methods to set up a timer for our methods.  Note that there will be no tests for this lesson and that results may vary from machine to machine.
 
 ## Tools and Resources
 
-It is recommended to review array iteration with for loops before continuing with this lesson.  [Link Content]
+[Setting timers in JavaScript](https://developer.mozilla.org/en-US/docs/Web/API/console/time_static)
+[Array Methods in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
 ## Setup
 
-**Fork and clone** this practice lesson into your local environment. Navigate into its
-directory in the terminal, then run `code .` to open the files in Visual Studio
-Code.
+Fork this repo and clone it onto your computer.
 
-In the root directory run `npm install`.
+Run `npm install`.
 
-Open `src/index.js`.  This is where you will be writing your code.
-
-You can run `npm test` to test your code.
+In order to examine our results we will be running `node src/index.js` from the root of the folder.
 
 ## Instructions
 
-Together we will apply the Algorithmic Problem Solving Process to the function `findSum`.  
+Start off by creating an array with the numbers 1-1,000,000 to work with using `let` (we need something sufficiently large to simulate the worst case run time):
 
-**1. Problem Definition:** 
-
-For `findSum` we will be finding the first pair of numbers in `arr` that sum to the number `num`.  The inputs will include the integer `num` and the array `arr`.  `findSum` will return an array of the matching numbers *in the order they were given in the array*.  For example:
-
-`findSum(3, [0, 3]) => [0, 3]`
-`findSum(3, [3, 0]) => [3, 0]`
-
-This is important in order to pass the tests provided in this lab.  
-
-If there is no matching pair we will return an empty array `[]`.
-
-It is good to note that we can expect no negative numbers and all inputs will be the expected data types.  Otherwise we would have to account for type checking.
-
-**2. Problem Analysis:** 
-
-Let's take an example and mimic a process as if we were using pen and paper.  Given the array `[0, 1, 2, 3]` let's find the pair of numbers that sum to `5`.  With pen and paper we may look at the first number as an anchor point and test if any of the following numbers will sum to `5`.  In other words we will look at the first number `0`, then test if `0 + 1 = 5` which is false. So we will now test if `0 + 1 = 5` which is also false.  And so will test if `0 + 2 = 5` which is also false.  And finally we test `0 + 3 = 5` which is false.
-
-Since we have tested all combinations with the number `0` we can now use `1` as an an anchor point.  (We don't have to test `1 + 0` since we've already tested `0 + 1` so we can skip to testing all numbers following `1`.)  We will test `1 + 2 = 5`, `1 + 3 = 5` which are all false.
-
-So we can move on to `2 + 3 = 5` which is true!  And so we have our matching pair: `2` and `3`.  
-
-For now we won't think about different algorithms or evaluate the efficiency.  
-
-**3. Algorithm Development:** 
-
-Let's move on to pseudocode.  Our processes will look at each number one at a time so we can use for loops!  We will need two for loops: one for the anchor point, and one for the number we will be testing against the anchor point.  Ultimately we will be using a nested for loop.  Below is an example of pseudocode:
-
-```
-// initial for loop for anchor point with index `i`
-//  inner for loop to test all following numbers against our anchor point (we will use index `j`)
-//    test if `arr[i] + arr[j]` matches the target number
-//      if it does match, return `[arr[i], arr[j]]` (remember we want the elements at those positions, not the indicies)
-// once our nested for loop is done we will have tested all possible combinations and so we know there is no matching pair.  we can return `[]`
-```
-
-Notice the indentation for our code blocks to start figuring out our scoping.
-
-At this point we will dive right into coding but you can break this down further if you'd like!  For example you can even write your code using pen and paper!  
-
-**4. Coding and Documentation:** 
-
-We will copy and paste the pseudocode and code each line.
-```
-function findSum(num arr){
-    // initial for loop for anchor point with index `i`
-    for (let i = 0; i < arr.length; i++){
-        // inner for loop to test all following numbers against our anchor point (we will use index `j`)
-        for (let j = i + 1; j < arr.length; j++){
-            // test if `arr[i] + arr[j]` matches the target number
-            if(arr[i] + arr[j] == num){
-                // if it does match, return `[arr[i], arr[j]]` (remember we want the elements at those positions, not the indicies)
-                return [arr[i], arr[j]]
-            }
-        }
-    }
-    // once our nested for loop is done we will have tested all possible combinations and so we know there is no matching pair.  we can return `[]`
-    return []
+```js
+let arr = []
+for(let i = 1; i <= 1000000; i++){
+    arr.push(i)
 }
 ```
 
-It may be helpful to write down the values for each iteration to solidify the concept of this nested for loop for example:
+Next we will use `console.time` and `console.timeEnd` to create our timers.  The following is an example for `shift`:
 
-```
-arr = [3, 2, 9, 8], num = 17
-
-first loop: 
-i = 0, j = 1
-arr[i] = 3, arr[j] = 2
-3 + 2 !== 17
-
-second loop:
-i = 0, j = 2
-arr[i] = 3, arr[j] = 9
-0 + 2 !== 17
-
-third loop:
-i = 0, j = 3
-arr[i] = 3, arr[j] = 8
-3 + 8 !== 17
-
-At this point we move to the next iteration of our outer for loop and restart our inner for loop but we'll just use the term 'fourth loop' for the sake of writing this out:
-
-fourth loop:
-i = 1, j = 2
-arr[i] = 2, arr[j] = 9
-2 + 9 !== 17
-
-fifth loop:
-i = 1, j = 3
-arr[i] = 2, arr[j] = 8
-2 + 8 !== 17
-
-And so on and so forth until we reach the valid loop.  We'll call this the `nth loop` where `n` is some arbitrary number.
-
-nth loop:
-i = 2, j = 3
-arr[i] = 9, arr[j] = 8
-9 + 8 === 17
+```js
+console.time('start shift');
+// the string for 'start shift' has to be exactly the same for both lines of code
+console.timeEnd('start shift');
 ```
 
-It's not necessary to do this every time you have a for loop.  But if you ever struggle with for loops (or anything else really) it may be helpful to write it out.  Or you can console log your work: ```console.log(`i = ${i}, j = ${j}, ${arr[i]} + ${arr[j]} = ${arr[i] + arr[j]}}`)```.
+In between these two lines of code we will call the `shift` method.
 
-**5. Testing and Debugging:** 
+```js
+console.time('start shift');
 
-Tests have been provided for you but the tests are not arbitrary.  There is a test for every case we may see (that we can think of so far).  
+// note we don't need to do anything with the value returned by .shift()
+arr.shift();
 
-There are cases where:
--  `arr = []` so the expectation is to return `[]`
-- there is no valid pair so the expectation is to *return an values of the valid pair* (not the indices)
-- there is a matching pair and the array is ordered
-- there is a matching pair and the array is unordered
-- there are duplicated numbers: `[8, 0, 0, 8, 0, 0]`
-- there is an array where all numbers are the same
-- there are no duplicated numbers but `num` is `arr[i] * 2`: `arr = [0, 0, 3, 0, 0]` and `num = [6]` which should return `[]`
+console.timeEnd('start shift');
+```
 
-The last case is important in case we had started our inner for loop at `i` instead of `i + 1`.
+Now we can run our file in terminal using `node src/index.js` and get some output.  An example of output you may see is:
 
-**6. Maintenance:** 
+`start shift: 0.029ms`
 
-This would be another good step to start thinking about optimization.  We won't cover this now.
+Now we will do the same thing again and again for all the methods in order to show that some methods are indeed slower than others (more specifically to prove `O(n)` methods are slower than `O(1)` methods).
 
-**7. Document and Comment:** 
+Keep in mind that your values have to be large enough in order to get a good picture of the execution time.  For example `arr.slice(200, 700)` won't take a lot of time since it's a relatively short slice of the array however `arr.slice(200, 300000)` will be significantly longer.
 
-It is always important to comment your code, but it is equally important to not over comment.  Let's recomment our code so that it is more readable and not so wordy:
+Here is an example of output for `shift`, `unshift`, `pop`, `push`, `slice`, and `splice`.  
 
-function findSum(num arr){
-    for (let i = 0; i < arr.length; i++){
-        for (let j = i + 1; j < arr.length; j++){
-            // if `arr[i] + arr[j]` matches the target number return elements
-            if(arr[i] + arr[j] == num){
-                return [arr[i], arr[j]]
-            }
-        }
-    }
-    // no matching pair, return empty array
-    return []
+```
+shift O(n): 1.222ms
+unshift O(n): 0.297ms
+pop O(1): 0.003ms
+push O(1): 0.001ms
+slice O(n): 1.565ms
+splice O(n): 3.964ms
+```
+
+You can do this for any block of code.  The solution code includes additional array methods such as the iterators `.find`, `.map` and `.forEach`.
+
+## Solution
+
+```js
+//array to work with
+let arr = [];
+for (let i = 1; i <= 1000000; i++) {
+	arr.push(i);
 }
+//.shift: O(n)
+console.time("shift O(n)");
+arr.shift();
+console.timeEnd("shift O(n)");
+
+//.unshift: O(n)
+console.time("unshift O(n)");
+arr.unshift(1);
+console.timeEnd("unshift O(n)");
+
+//.pop: O(1)
+console.time("pop O(1)");
+arr.pop();
+console.timeEnd("pop O(1)");
+
+//.push: O(1)
+console.time("push O(1)");
+arr.push(11);
+console.timeEnd("push O(1)");
+
+//.slice: O(n)
+console.time("slice O(n)");
+arr.slice(200, 300000);
+console.timeEnd("slice O(n)");
+
+//.splice: O(n)
+console.time("splice O(n)");
+arr.splice(300000, 700);
+console.timeEnd("splice O(n)");
+
+//.forEach: O(n)
+console.time("forEach O(n)");
+arr.forEach((el) => {
+	//this is just an arbitrary operation to prove our time complexity
+	let num = 300 + el;
+});
+console.timeEnd("forEach O(n)");
+
+//.map: O(n)
+console.time("map O(n)");
+arr.map((el) => {
+	//this is just an arbitrary operation to prove our time complexity
+	return 300 + el;
+});
+console.timeEnd("map O(n)");
+
+//.filter: O(n)
+console.time("filter O(n)");
+arr.filter((el) => {
+	//this is just an arbitrary operation to prove our time complexity
+	return el < 500000;
+});
+console.timeEnd("filter O(n)");
+
+//.sort: O(n log n)
+console.time("sort O(n log n)");
+arr.sort()
+console.timeEnd("sort O(n log n)");
+
+//.indexOf: O(n)
+console.time("indexOf O(n)");
+arr.indexOf(400000)
+console.timeEnd("indexOf O(n)");
 ```
 
-You can add whatever comments you feel are most important to you.  The above is just an example at attempting to simplify the comments so that they are more readable for other people.
+An example output of the above code is:
+```
+shift O(n): 0.228ms
+unshift O(n): 0.286ms
+pop O(1): 0.003ms
+push O(1): 0.001ms
+slice O(n): 1.485ms
+splice O(n): 0.475ms
+forEach O(n): 6.04ms
+map O(n): 8.265ms
+filter O(n): 9.489ms
+sort O(n log n): 20.688ms
+indexOf O(n): 0.185ms
+```
 
-And there we have it!  Our final solution.
+Notice how fast `pop` and `push` are compared to the other methods!  Regardless of how long the array is `pop` and `push`'s runtime will remain roughly the same.  In other words their runtime is constant: `O(1)`.
