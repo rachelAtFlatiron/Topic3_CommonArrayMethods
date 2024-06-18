@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this code along we will briefly examine the runtime of the following array methods: `pop`, `push`, `shift`, `unshift`, `slice`, `splice`.  We will use JavaScript's `console.time()` and `console.timeEnd()` methods to set up a timer for our methods.  Note that there will be no tests for this lesson and that results may vary from machine to machine.
+In this code along we will briefly examine the runtime of the following array methods: `pop`, `push`, `shift`, `unshift`, `slice`, `splice`.  We will use JavaScript's `console.time()` and `console.timeEnd()` methods to set up a timer for our methods to see how fast they run milliseconds.  Note that there will be no tests for this lesson and that results may vary from machine to machine.
 
 ## Tools and Resources
 
@@ -53,20 +53,24 @@ Now we can run our file in terminal using `node src/index.js` and get some outpu
 
 Now we will do the same thing again and again for all the methods in order to show that some methods are indeed slower than others (more specifically to prove `O(n)` methods are slower than `O(1)` methods).
 
-Keep in mind that your values have to be large enough in order to get a good picture of the execution time.  For example `arr.slice(200, 700)` won't take a lot of time since it's a relatively short slice of the array however `arr.slice(200, 300000)` will be significantly longer.
+Keep in mind that your values have to be large enough in order to get a good picture of the execution time.  For example `arr.slice(200, 700)` won't take a lot of time since it's a relatively short slice of the array however `arr.slice(200, 300000)` will take significantly longer.
 
 Here is an example of output for `shift`, `unshift`, `pop`, `push`, `slice`, and `splice`.  
 
 ```
-shift O(n): 1.222ms
-unshift O(n): 0.297ms
-pop O(1): 0.003ms
+shift O(n): 0.231ms
+unshift O(n): 0.29ms
+pop O(1): 0.002ms
 push O(1): 0.001ms
-slice O(n): 1.565ms
-splice O(n): 3.964ms
+slice O(n): 1.417ms
+splice O(n): 0.479ms
+forEach O(n): 6.043ms
+map O(n): 8.165ms
+filter O(n): 9.56ms
+indexOf O(n): 0.173ms
 ```
 
-You can do this for any block of code.  The solution code includes additional array methods such as the iterators `.find`, `.map` and `.forEach`.
+You can do this for any block of code including if statements and while loops.  The solution code includes additional array methods such as the iterators `.find`, `.map` and `.forEach`.
 
 ## Solution
 
@@ -130,30 +134,39 @@ arr.filter((el) => {
 });
 console.timeEnd("filter O(n)");
 
-//.sort: O(n log n)
-console.time("sort O(n log n)");
-arr.sort()
-console.timeEnd("sort O(n log n)");
-
 //.indexOf: O(n)
 console.time("indexOf O(n)");
 arr.indexOf(400000)
 console.timeEnd("indexOf O(n)");
 ```
+Below is an example of output you may see when running `src/index.js` *from the root folder*.
 
-An example output of the above code is:
 ```
-shift O(n): 0.228ms
-unshift O(n): 0.286ms
-pop O(1): 0.003ms
+shift O(n): 0.359ms
+unshift O(n): 0.18ms
+pop O(1): 0.002ms
 push O(1): 0.001ms
-slice O(n): 1.485ms
-splice O(n): 0.475ms
-forEach O(n): 6.04ms
-map O(n): 8.265ms
-filter O(n): 9.489ms
-sort O(n log n): 20.688ms
-indexOf O(n): 0.185ms
+slice O(n): 1.389ms
+splice O(n): 2.341ms
+forEach O(n): 6.402ms
+map O(n): 8.461ms
+filter O(n): 10.151ms
+indexOf O(n): 0.31ms
 ```
 
-Notice how fast `pop` and `push` are compared to the other methods!  Regardless of how long the array is `pop` and `push`'s runtime will remain roughly the same.  In other words their runtime is constant: `O(1)`.
+Notice how fast `pop` and `push` are compared to the other methods!  Regardless of how long the array is `pop` and `push`'s runtime will remain roughly the same.  In other words their runtime is constant: `O(1)`.  Feel free to play around with the length of the original array to see different outcomes.  For example if your original array was 8,000,000 elements long your result may look something like:
+
+```
+shift O(n): 1.459ms
+unshift O(n): 1.314ms
+pop O(1): 0.007ms
+push O(1): 0.001ms
+slice O(n): 4.472ms
+splice O(n): 6.41ms
+forEach O(n): 44.132ms
+map O(n): 58.894ms
+filter O(n): 50.162ms
+indexOf O(n): 0.237ms
+```
+
+Again notice how quick `.pop` and `.push` are!  They remained roughly the same as before whereas all other methods' runtimes dramatically increased.  For example `.forEach` runtime increased from 6.402ms to 44.132ms.  Be careful not to make your original array too long or your program might crash!

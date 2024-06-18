@@ -2,7 +2,7 @@
 
 //array to work with
 let arr = [];
-for (let i = 1; i <= 1000000; i++) {
+for (let i = 1; i <= 8000000; i++) {
 	arr.push(i);
 }
 //.shift: O(n)
@@ -58,11 +58,6 @@ arr.filter((el) => {
 	return el < 500000;
 });
 console.timeEnd("filter O(n)");
-
-//.sort: O(n log n)
-console.time("sort O(n log n)");
-arr.sort()
-console.timeEnd("sort O(n log n)");
 
 //.indexOf: O(n)
 console.time("indexOf O(n)");
